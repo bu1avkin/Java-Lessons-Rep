@@ -4,6 +4,8 @@ import java.sql.*;
 import java.util.Scanner;
 import java.util.Arrays;
 
+// hasnext float в try catch
+
 /*
 Средний вариант.
  Целочисленные, байтовые и вещественные типы данных. Реализовать программу с интерактивным консольным меню,
