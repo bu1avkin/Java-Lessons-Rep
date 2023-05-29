@@ -1,5 +1,10 @@
 package com.datatypes.idea.less5.medlvl;
 
+import com.datatypes.idea.db_connection;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.sql.*;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -21,11 +26,12 @@ public class stringBufferMySQL {
         System.out.println("Введите вторую строку: ");
         String str2 = text2.nextLine();
 
-        while (!"5".equals(s)) {
+        while (!"6".equals(s)) {
             System.out.println("1. Вывести все таблицы из базы данных.");
             System.out.println("2. Создать таблицу в базе данных.");
             System.out.println("3. Изменить порядок символов строки на обратный, результат сохранить в MySQL с последующим выводом в консоль.");
             System.out.println("4. Добавить одну строку в другую, результат сохранить в MySQL с последующим выводом в консоль.");
+            System.out.println("6. НЕ Выход из программы.");
             System.out.println("5. Выход из программы.");
             s = scan.next();
 
@@ -38,7 +44,7 @@ public class stringBufferMySQL {
             switch (x) {
                 case 1 -> {
                     DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-                    String mysqlUrl = "jdbc:mysql://localhost/less2medlvl";
+                    String mysqlUrl = "jdbc:mysql://localhost/testy";
                     Connection con = DriverManager.getConnection(mysqlUrl, "root", "root1234");
                     System.out.println("Коннект к базе - Успешно!");
                     Statement stmt = con.createStatement();
@@ -51,11 +57,11 @@ public class stringBufferMySQL {
                 }
                 case 2 -> {
                     DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-                    String mysqlUrl = "jdbc:mysql://localhost/less2medlvl";
+                    String mysqlUrl = "jdbc:mysql://localhost/testy";
                     Connection con2 = DriverManager.getConnection(mysqlUrl, "root", "root1234");
                     System.out.println("Коннект к базе - Успешно!");
                     Statement stmt2 = con2.createStatement();
-                    String query = "CREATE TABLE IF NOT EXISTS " + tablename + " (STR1 VARCHAR(50), STR2 VARCHAR(50))";
+                    String query = "CREATE TABLE IF NOT EXISTS " + tablename + " (STR1 VARCHAR(256), STR2 VARCHAR(256))";
                     stmt2.executeUpdate(query);
                     ResultSet rs2 = stmt2.executeQuery("SHOW TABLES");
                     System.out.println("Таблицы из базы данных: ");
@@ -66,7 +72,7 @@ public class stringBufferMySQL {
                 }
                 case 3 -> {
                     DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-                    String mysqlUrl = "jdbc:mysql://localhost/less2medlvl";
+                    String mysqlUrl = "jdbc:mysql://localhost/testy";
                     Connection con3 = DriverManager.getConnection(mysqlUrl, "root", "root1234");
                     System.out.println("Коннект к базе - Успешно!");
 
@@ -89,7 +95,7 @@ public class stringBufferMySQL {
                 }
                 case 4 -> {
                     DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-                    String mysqlUrl = "jdbc:mysql://localhost/less2medlvl";
+                    String mysqlUrl = "jdbc:mysql://localhost/testy";
                     Connection con4 = DriverManager.getConnection(mysqlUrl, "root", "root1234");
                     System.out.println("Коннект к базе - Успешно!");
 
@@ -109,6 +115,40 @@ public class stringBufferMySQL {
                         System.out.print(Arrays.toString(rs4.getString(1).split("  ")));
                         System.out.print(Arrays.toString(rs4.getString(2).split("  ")));
                         System.out.println();
+                    }
+                }
+                case 5 -> {
+                    try {
+                        PrintWriter pw = new PrintWriter(new File("/Users/bulavkin/Developer/GitHub/Java-Lessons-Rep/javaLessons/src/com/datatypes/idea/csv_files/test.csv"));
+                        pw.println("STR1,STR2");
+                        StringBuilder sb = new StringBuilder();
+
+
+                        Connection connection = null;
+                        db_connection obj_sb_connection = new db_connection();
+                        connection = obj_sb_connection.getConnection();
+                        ResultSet rs = null;
+
+                        String query = "select * from testy.testy";
+                        PreparedStatement ps = connection.prepareStatement(query);
+                        rs = ps.executeQuery();
+
+                        while (rs.next()) {
+                            sb.append(rs.getString("STR1"));
+                            sb.append(",");
+                            sb.append(rs.getString("STR2"));
+                            sb.append("\r\n");
+                        }
+
+                        pw.write(sb.toString());
+                        pw.close();
+                        System.out.println("finished");
+
+
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
                     }
                 }
             }

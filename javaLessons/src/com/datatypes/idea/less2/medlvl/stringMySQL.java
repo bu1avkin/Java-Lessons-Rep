@@ -3,6 +3,7 @@ package com.datatypes.idea.less2.medlvl;
 import java.sql.*;
 import java.util.Scanner;
 import java.util.Arrays;
+import com.datatypes.idea.db_connection;
 
 public class stringMySQL {
     public static void main(String[] args) throws SQLException {
@@ -39,11 +40,11 @@ public class stringMySQL {
 
             switch (x) {
                 case 1 -> {
-                    DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-                    String mysqlUrl = "jdbc:mysql://localhost/less2medlvl";
-                    Connection con = DriverManager.getConnection(mysqlUrl, "root", "root1234");
+                    Connection connection = null;
+                    db_connection obj_sb_connection = new db_connection();
+                    connection = obj_sb_connection.getConnection();
                     System.out.println("Коннект к базе - Успешно!");
-                    Statement stmt = con.createStatement();
+                    Statement stmt = connection.createStatement();
                     ResultSet rs = stmt.executeQuery("SHOW TABLES");
                     System.out.println("Таблицы из базы данных: ");
                     while (rs.next()) {
